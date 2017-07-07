@@ -9,7 +9,7 @@ var LIGHTS = {
         size: 5,
         transparent: true,
         vertexColors: THREE.VertexColors,
-        map: (new THREE.TextureLoader()).load("circle.png"),
+        map: (new THREE.TextureLoader()).load("img/circle.png"),
     }),
     remap: function (p){
         return new THREE.Vector3((p[0]-5000)/10, p[2]/10, -(p[1]+18500)/10);
