@@ -2,9 +2,10 @@ var LIGHTS = {
     rawdata: RAW_LIGHTS,
     length: 0,
     lightmap: [],
+    colors: [],
     colormode: 'HSL',
     parametric: { RGB: [1, 1, 1], HSL: ['x + t*0.0001', 1, 0.5] },
-    geometry: new THREE.Geometry(),
+    geometry: new THREE.BufferGeometry(),
     material: new THREE.PointsMaterial({
         size: 5,
         transparent: true,
@@ -12,7 +13,7 @@ var LIGHTS = {
         map: (new THREE.TextureLoader()).load("img/circle.png"),
     }),
     remap: function (p){
-        return new THREE.Vector3((p[0]-5000)/10, p[2]/10, -(p[1]+18500)/10);
+        return [(p[0]-5000)/10, p[2]/10, -(p[1]+18500)/10];
     },
     setcolor: function(a, b, c, mode){
         var p = [a || 0, b || 0, c || 0];
@@ -26,13 +27,14 @@ var LIGHTS = {
         var t = performance.now();
         var cm = 'set'+this.colormode;
         for (var l = 0; l < this.length; l++) {
-            this.geometry.colors[l][cm](...this.getcolor(this.lightmap[l], t));
+            this.colors[l][cm](...this.getcolor(this.lightmap[l], t));
+            this.colors[l].toArray(this.geometry.attributes.color.array, l*3);
         }
-        this.geometry.colorsNeedUpdate = true;
+        this.geometry.attributes.color.needsUpdate = true;
     },
     init: function(){
 
-        var tmpmap = [];
+        var tmpmap = [], vertices = [];
         var hid, hmax, hmin, hrange, leftest = [];
         var rows, cols, r, c, row, col, i = 0;
 
@@ -44,12 +46,12 @@ var LIGHTS = {
             col = [];
             hmax = 0;
 
-            leftest.push([r, row[0][0]]);
+            leftest.push([r, row[cols-1][0]]);
 
             for (c = 0; c < cols; c++) {
                 col.push({ idx: i++, r: r, n: c });
-                this.geometry.vertices.push(this.remap(row[c]));
-                this.geometry.colors.push(new THREE.Color(1,1,1));
+                vertices.push(...this.remap(row[c]));
+                this.colors.push(new THREE.Color(1,1,1));
                 if ( row[c][2] >= hmax ) { hmax = row[c][2]; hid = c; }
             }
 
@@ -62,6 +64,9 @@ var LIGHTS = {
             }
             tmpmap.push(col);
         }
+
+        this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(vertices), 3));
+        this.geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(vertices.length), 3));
 
         leftest.sort(function(a, b){return a[1] < b[1] ? -1 : 1;});
 
