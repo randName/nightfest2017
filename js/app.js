@@ -1,6 +1,6 @@
 (function() {
     'use strict';
-    var scene, renderer, lights;
+    var scene, renderer;
     var startpos = [ 500, 100, 30 ];
     var orbcontrols, orbcamera, fpscontrols, fpscamera;
 
@@ -8,11 +8,11 @@
     animate();
 
     function init() {
-        lights = LIGHTS.init();
 
         scene = new THREE.Scene();
-		scene.add(makefloor());
-        scene.add(lights);
+        scene.add(makefloor());
+        scene.add(LIGHTS.init());
+        scene.add(WALLS.init());
 
         renderer = new THREE.WebGLRenderer();
         renderer.setPixelRatio(window.devicePixelRatio);
