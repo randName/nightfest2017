@@ -1,8 +1,6 @@
 var LIGHTS = {
     length: 0,
     lightmap: [],
-    colormode: 'HSL',
-    parametric: { RGB: [1, 1, 1], HSL: ['x + t*0.0001', 1, 0.5] },
     geometry: new THREE.BufferGeometry(),
     material: new THREE.PointsMaterial({
         size: 5,
@@ -10,23 +8,14 @@ var LIGHTS = {
         vertexColors: THREE.VertexColors,
         map: (new THREE.TextureLoader()).load("img/circle.png"),
     }),
-    setcolor: function(a, b, c, mode){
-        var p = [a || 0, b || 0, c || 0];
-        this.colormode = ( 'set'+mode in (new THREE.Color()) ) ? mode : 'HSL';
-        this.parametric[this.colormode] = p;
-        this.getcolor = new Function('l', 't', 'const {x,y,z,r,n}=l; return ['+p.join(',')+'];');
-        return this.colormode;
-    },
-    getcolor: function(l, t){ return [ l.x + t*0.0001, 1.0, 0.5 ]; },
     update: function(){
         var t = performance.now();
-        var cm = 'set'+this.colormode;
-        var col = new THREE.Color();
+        var c = this.geometry.attributes.color;
+        COLOR.update(t);
         for (var l = 0; l < this.length; l++) {
-            col[cm](...this.getcolor(this.lightmap[l], t));
-            col.toArray(this.geometry.attributes.color.array, l*3);
+            COLOR.get(this.lightmap[l]).toArray(c.array, l*3);
         }
-        this.geometry.attributes.color.needsUpdate = true;
+        c.needsUpdate = true;
     },
     init: function(){
 

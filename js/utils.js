@@ -19,39 +19,31 @@ function makecamera(){
 
 function initform(){
     var modal = document.getElementById('colorform');
-    var sel = document.getElementById('mode');
+    var fields = ['setup', 'loop', 'output'];
 
-    function modevalupdate(e){
-        var colorparams = LIGHTS.parametric[LIGHTS.colormode];
-        if (!e) {
-            for(var opt=0; opt<sel.options.length; opt++) {
-                if ( sel.options[opt].value == LIGHTS.colormode ){
-                    sel.selectedIndex = opt;
-                    break;
-                }
-            }
-        }
-        for(var i=0; i<3; i++) {
-            document.getElementById('l'+i).innerHTML = LIGHTS.colormode.charAt(i);
-            document.getElementById('c'+i).value = colorparams[i];
-        }
-    }
+    var e, content = document.createElement('div');
+    content.className = 'modal-content';
 
-    sel.onchange = modevalupdate;
-    document.getElementById('colbtn').onclick = function() {
-        modevalupdate();
-        modal.style.display = "block";
-    }
-    window.onclick = function(e) { if (e.target == modal) modal.style.display = "none"; }
+    fields.map(function(i){
+        e = document.createElement('span');
+        e.innerHTML = i.charAt(0).toUpperCase() + i.slice(1);
+        content.appendChild(e);
+        e = document.createElement('pre');
+        e.id = i; e.contentEditable = true;
+        e.innerText = COLOR.raw[i];
+        content.appendChild(e);
+    });
 
-    document.getElementById('setcol').onclick = function() {
-        var opts = [];
-        for(var i=0; i<3; i++) {
-            opts.push(document.getElementById('c'+i).value);
-        }
-        opts.push(sel.options[sel.selectedIndex].value);
-        console.log(opts);
-        LIGHTS.setcolor(...opts);
+    var setcol = document.createElement('button');
+    setcol.innerHTML = 'Update';
+    setcol.onclick = function() {
+        COLOR.set(fields.reduce((obj, i) => Object.assign(obj, {[i]: document.getElementById(i).innerText}), {}));
         modal.style.display = "none";
     }
+
+    content.appendChild(setcol);
+    modal.appendChild(content);
+
+    document.getElementById('colbtn').onclick = function() { modal.style.display = "block"; }
+    window.onclick = function(e) { if (e.target == modal) modal.style.display = "none"; }
 }

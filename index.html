@@ -9,6 +9,7 @@
   <script type="text/javascript" src="js/three.min.js"></script>
   <script type="text/javascript" src="js/controls/OrbitControls.js"></script>
   <script type="text/javascript" src="js/controls/PointerLockControls.js"></script>
+  <script type="text/javascript" src="js/color.js"></script>
   <script type="text/javascript" src="js/utils.js"></script>
   <script type="text/javascript" src="js/lights.js"></script>
   <script type="text/javascript" src="js/walls.js"></script>
@@ -16,21 +17,7 @@
  <body>
   <div id="container"></div>
   <div id="footer"><span id="info"></span><button id="colbtn">Set Colour Parameters</button></div>
-  <div id="colorform" class="modal">
-   <div class="modal-content">
-    <pre>Available variables: x, y, z, r, n, t</pre>
-    <p>
-     <select id="mode">
-      <option value="HSL" selected>HSL</option>
-      <option value="RGB">RGB</option>
-     </select>
-	 <label id="l0" for="c0">H</label>:<input type="text" id="c0"></input>
-	 <label id="l1" for="c1">S</label>:<input type="text" id="c1"></input>
-	 <label id="l2" for="c2">L</label>:<input type="text" id="c2"></input>
-     <button id="setcol">Update</button>
-    </p>
-   </div>
-  </div>
+  <div id="colorform" class="modal"></div>
   <script type="text/javascript" src="js/fps.js"></script>
   <script type="text/javascript" src="js/app.js"></script>
  </body>
