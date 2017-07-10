@@ -1,8 +1,6 @@
 var LIGHTS = {
-    rawdata: RAW_LIGHTS,
     length: 0,
     lightmap: [],
-    colors: [],
     colormode: 'HSL',
     parametric: { RGB: [1, 1, 1], HSL: ['x + t*0.0001', 1, 0.5] },
     geometry: new THREE.BufferGeometry(),
@@ -12,9 +10,6 @@ var LIGHTS = {
         vertexColors: THREE.VertexColors,
         map: (new THREE.TextureLoader()).load("img/circle.png"),
     }),
-    remap: function (p){
-        return [(p[0]-5000)/10, p[2]/10, -(p[1]+18500)/10];
-    },
     setcolor: function(a, b, c, mode){
         var p = [a || 0, b || 0, c || 0];
         this.colormode = ( 'set'+mode in (new THREE.Color()) ) ? mode : 'HSL';
@@ -26,53 +21,39 @@ var LIGHTS = {
     update: function(){
         var t = performance.now();
         var cm = 'set'+this.colormode;
+        var col = new THREE.Color();
         for (var l = 0; l < this.length; l++) {
-            this.colors[l][cm](...this.getcolor(this.lightmap[l], t));
-            this.colors[l].toArray(this.geometry.attributes.color.array, l*3);
+            col[cm](...this.getcolor(this.lightmap[l], t));
+            col.toArray(this.geometry.attributes.color.array, l*3);
         }
         this.geometry.attributes.color.needsUpdate = true;
     },
     init: function(){
 
-        var tmpmap = [], vertices = [];
-        var hid, hmax, hmin, hrange, leftest = [];
-        var rows, cols, r, c, row, col, i = 0;
-
-        rows = this.rawdata.length;
+        var h, hmin, hrange, p, vertices = [];
+        var rows = DATA.length, row, r, cols, i = 0;
 
         for (r = 0; r < rows; r++) {
-            row = this.rawdata[r];
+            row = DATA.vertices[r];
             cols = row.length; 
-            col = [];
-            hmax = 0;
 
-            leftest.push([r, row[cols-1][0]]);
+            h = row.map((c, n) => [c[1], n]).sort((a, b) => b[0] - a[0])[0];
+            hmin = (row[0][1] + row[cols-1][1])/2;
+            hrange = h[0] - hmin;
 
-            for (c = 0; c < cols; c++) {
-                col.push({ idx: i++, r: r, n: c });
-                vertices.push(...this.remap(row[c]));
-                this.colors.push(new THREE.Color(1,1,1));
-                if ( row[c][2] >= hmax ) { hmax = row[c][2]; hid = c; }
-            }
+            p = { r: DATA.original[r], x: r/(rows-1) };
 
-            hmin = (row[0][2]+row[cols-1][2])/2;
-            hrange = hmax-hmin;
-
-            for (c = 0; c < cols; c++) {
-                col[c].y = ((c<=hid)?(c/hid):(1+((c-hid+1)/(cols-hid))))/2;
-                col[c].z = (row[c][2]-hmin)/hrange;
-            }
-            tmpmap.push(col);
+            this.lightmap.push(...row.map(function(c, n){
+                vertices.push(...c);
+                return Object.assign({
+                    idx: i++, n: n, z: (c[1]-hmin)/hrange,
+                    y: ((n<=h[1])?(n/h[1]):(1+((n-h[1]+1)/(cols-h[1]))))/2
+                }, p);
+            }));
         }
 
         this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(vertices), 3));
         this.geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(vertices.length), 3));
-
-        leftest.sort(function(a, b){return a[1] < b[1] ? -1 : 1;});
-
-        this.lightmap = leftest.map(function(r){return tmpmap[r[0]];}).reduce(function(a, b, i){
-            return a.concat(b.map(function(r){return Object.assign({x: i/(rows-1)}, r);}));
-        }, []).sort(function(a, b){return a.idx < b.idx ? -1 : 1;});
 
         this.length = this.lightmap.length;
 
