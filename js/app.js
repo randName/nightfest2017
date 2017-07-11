@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     var scene, renderer;
-    var startpos = [ 500, 100, 30 ];
+    var startpos = [ 625, 125, 125 ];
     var orbcontrols, orbcamera, fpscontrols, fpscamera;
 
     init();
@@ -23,6 +23,7 @@
         orbcontrols = new THREE.OrbitControls(orbcamera, renderer.domElement);
         orbcamera.position.set(...startpos);
         orbcontrols.enableZoom = true;
+        orbcontrols.enableKeys = false;
 
         fpscamera = makecamera();
         fpscontrols = FPS.init(fpscamera);
@@ -33,10 +34,10 @@
 
         window.addEventListener('resize', function() {
             var camera = FPS.controls.enabled ? fpscamera : orbcamera;
-			camera.aspect = window.innerWidth/(window.innerHeight-50);
-			camera.updateProjectionMatrix();
-			renderer.setSize(window.innerWidth, window.innerHeight-50);
-		}, false);
+            camera.aspect = window.innerWidth/(window.innerHeight-50);
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight-50);
+        }, false);
     }
 
     function animate() {

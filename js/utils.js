@@ -1,10 +1,9 @@
 function makefloor(){
     var floor = new THREE.Mesh(
-        new THREE.PlaneGeometry(2000, 500),
-        new THREE.MeshBasicMaterial({color:0x1f1f1f})
+        new THREE.PlaneGeometry(1600, 600),
+        new THREE.MeshBasicMaterial({color:0x101010})
     );
     floor.rotation.x -= Math.PI/2;
-
     return floor;
 }
 
@@ -13,7 +12,6 @@ function makecamera(){
     var aspectRatio = window.innerWidth/window.innerHeight;
     var nearPlane = 1;
     var farPlane = 2000;
-
     return new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
 }
 

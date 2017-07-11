@@ -1,8 +1,7 @@
 var WALLS = {
-    rawdata: RAW_LIGHTS,
     geometry:new THREE.BufferGeometry(),
     material: new THREE.MeshBasicMaterial({
-        color: 0x0f0f0f,
+        color: 0x0c0c0c,
         side: THREE.BackSide,
     }),
     init: function(){
@@ -10,7 +9,7 @@ var WALLS = {
         var pointmap = [], vertices = [], triangles = [];
         var r, rows = DATA.length, i = 0;
 
-        pointmap = DATA.vertices.map(function(r){return r.map(function(c){vertices.push(...c); return i++;})});
+        pointmap = DATA.vertices.map(r=>r.map(function(c){vertices.push(...c); return i++;}));
         this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(vertices), 3));
 
         var lims, maxc, rem, a, b;
