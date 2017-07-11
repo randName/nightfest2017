@@ -3,7 +3,11 @@ var LIGHTS = {
     lightmap: [],
     geometry: new THREE.BufferGeometry(),
     material: new THREE.PointsMaterial({
-        size: 5,
+        size: 15,
+        opacity: 0.75,
+        alphaTest: 0.5,
+        depthTest: true,
+        depthWrite: false,
         transparent: true,
         vertexColors: THREE.VertexColors,
         map: (new THREE.TextureLoader()).load("img/circle.png"),
@@ -27,7 +31,7 @@ var LIGHTS = {
             cols = row.length; 
 
             h = row.map((c, n) => [c[1], n]).sort((a, b) => b[0] - a[0])[0];
-            hmin = (row[0][1] + row[cols-1][1])/2;
+            hmin = Math.min(row[0][1], row[cols-1][1]);
             hrange = h[0] - hmin;
 
             p = { r: DATA.original[r], x: r/(rows-1) };
