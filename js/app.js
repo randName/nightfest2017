@@ -11,7 +11,6 @@
 
         scene = new THREE.Scene();
         scene.add(makefloor());
-        scene.add(LIGHTS.init());
         scene.add(WALLS.init());
 
         renderer = new THREE.WebGLRenderer();
@@ -42,7 +41,7 @@
 
     function animate() {
         requestAnimationFrame(animate);
-        LIGHTS.update();
+        WALLS.update();
         if ( FPS.controls.enabled ) {
             fpscontrols.update();
             renderer.render(scene, fpscamera);
