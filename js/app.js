@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     var scene, renderer;
-    var startpos = [ 625, 125, 125 ];
+    var startpos = [ 625, 0, 125 ];
     var orbcontrols, orbcamera, fpscontrols, fpscamera;
 
     init();

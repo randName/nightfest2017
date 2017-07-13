@@ -4,6 +4,7 @@ function makefloor(){
         new THREE.MeshBasicMaterial({color:0x101010})
     );
     floor.rotation.x -= Math.PI/2;
+    floor.position.y -= 100;
     return floor;
 }
 
