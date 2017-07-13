@@ -28,14 +28,14 @@ function initform(){
         content.appendChild(e);
         e = document.createElement('pre');
         e.id = i; e.contentEditable = true;
-        e.innerText = COLOR.raw[i];
+        e.innerText = LIGHTS.raw[i];
         content.appendChild(e);
     });
 
     var setcol = document.createElement('button');
     setcol.innerHTML = 'Update';
     setcol.onclick = function() {
-        COLOR.set(fields.reduce((obj, i) => Object.assign(obj, {[i]: document.getElementById(i).innerText}), {}));
+        LIGHTS.set(fields.reduce((obj, i) => Object.assign(obj, {[i]: document.getElementById(i).innerText}), {}));
         modal.style.display = "none";
     }
 
