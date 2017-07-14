@@ -1,7 +1,7 @@
 function makefloor(){
     var floor = new THREE.Mesh(
         new THREE.PlaneGeometry(1600, 600),
-        new THREE.MeshBasicMaterial({color:0x101010})
+        new THREE.MeshPhongMaterial({color: 0x101010})
     );
     floor.rotation.x -= Math.PI/2;
     floor.position.y -= 100;

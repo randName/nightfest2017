@@ -1,7 +1,11 @@
 var WALLS = {
     geometry: new THREE.BufferGeometry(),
-    material: new THREE.MeshBasicMaterial({
+    material: new THREE.MeshPhongMaterial({
+        shininess: 100,
+        specular: 0xffffff,
+        emissive: 0x090909,
         side: THREE.BackSide,
+        shading: THREE.FlatShading,
         vertexColors: THREE.VertexColors,
     }),
     update: function(){

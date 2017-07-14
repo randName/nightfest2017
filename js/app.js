@@ -12,6 +12,7 @@
         scene = new THREE.Scene();
         scene.add(makefloor());
         scene.add(WALLS.init());
+        scene.add(new THREE.AmbientLight(0xffffff, 2));
 
         renderer = new THREE.WebGLRenderer();
         renderer.setPixelRatio(window.devicePixelRatio);
