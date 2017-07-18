@@ -30,7 +30,7 @@
         fpscontrols.camera.position.set(...startpos);
         scene.add(fpscontrols.camera);
 
-        initform();
+        EXAMPLE.load('examples/balls.js', function(d){ LIGHTS.init(d); initform(); });
 
         window.addEventListener('resize', function() {
             var camera = FPS.controls.enabled ? fpscamera : orbcamera;

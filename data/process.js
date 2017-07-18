@@ -21,3 +21,21 @@ var DATA = {
 }
 
 DATA.init();
+
+var EXAMPLE = {
+    list: [],
+    load: function(url, init){
+        var self = this;
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function(){
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var r = xmlhttp.responseText.split(/\/\/\/\/ (setup|loop|output)/).slice(1);
+                var d = Object.assign(...r.map((v, i) => (i%2)?{}:{[v]: r[i+1]}));
+                if ( init ) init(d);
+                self.list.push(d);
+            }
+        }
+        xmlhttp.open("GET", 'data/'+url, true);
+        xmlhttp.send();
+    },
+}
