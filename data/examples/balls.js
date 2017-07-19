@@ -1,29 +1,17 @@
 //// setup
+var gn = (r) => ({ cx: r?0:rand(), cy: rand(), dx: rand(), dy: rand(), cl: rand()});
 return {
-    c: Array.from({length: 15}, ()=>({
-        cx: rand(),
-        cy: rand(),
-        dx: rand(),
-        dy: rand(),
-        cl: rand()
-    }))
+    gen: gn,
+    c: Array.from({length: 15}, gn)
 }
 
 //// loop
 state.c = state.c.map(function(v){
     v.cx += v.dx*dt*0.1;
-    if(v.cx > 1){
-        v.cx = 0;
-        v.dx = rand();
-        v.dy = rand();
-        v.cl = rand();
-        return v
-    }
+    if (v.cx > 1) return state.gen(true);
 
     v.cy += v.dy*dt*0.1;
-    if(v.cy < 0 || v.cy > 1){
-        v.dy = -v.dy
-    }
+    if (v.cy < 0 || v.cy > 1) v.dy *= -1;
     return v
 });
 
