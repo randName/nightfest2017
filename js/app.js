@@ -16,7 +16,7 @@
 
         renderer = new THREE.WebGLRenderer();
         renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight-50); 
+        renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('container').appendChild(renderer.domElement);
 
         orbcamera = makecamera();
@@ -35,9 +35,9 @@
 
         window.addEventListener('resize', function() {
             var camera = FPS.controls.enabled ? fpscamera : orbcamera;
-            camera.aspect = window.innerWidth/(window.innerHeight-50);
+            camera.aspect = window.innerWidth/(window.innerHeight);
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight-50);
+            renderer.setSize(window.innerWidth, window.innerHeight);
         }, false);
     }
 

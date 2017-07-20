@@ -19,6 +19,7 @@ var FORM = {
         });
 
         var setcol = document.createElement('button');
+        setcol.style.float = 'right';
         setcol.innerHTML = 'Update';
         setcol.onclick = this.set.bind(this);
         content.appendChild(setcol);
@@ -28,11 +29,7 @@ var FORM = {
         window.onclick = (function(e){if (e.target == this.modal) this.hide();}).bind(this);
     },
     fill: function(param){
-        var e;
-        this.fields.map(function(i){
-            e = document.getElementById(i);
-            e.innerText = param[i];
-        })
+        this.fields.map(function(i){ document.getElementById(i).innerText = param[i]; })
     },
     save: function(){
         this.raw = this.fields.reduce((o, i) => Object.assign(o, {[i]: document.getElementById(i).innerText}), {});
