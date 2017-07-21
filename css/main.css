@@ -6,10 +6,20 @@ html, body {
 }
 
 .btn {
+    opacity: 0.6;
     padding: 10px;
     position: fixed;
-    background-color: #333;
-    background-color: rgba(0,0,0,0.6);
+    background-color: #111;
+}
+
+.btn:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+#gitbtn {
+    top: 20px;
+    right: 20px;
 }
 
 #fpsbtn {

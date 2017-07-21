@@ -33,6 +33,10 @@
         FORM.init();
         EXAMPLE.load('examples/balls.js', function(d){ LIGHTS.init(d); FORM.fill(d); });
 
+        document.getElementById('gitbtn').addEventListener('click', function(e){
+            window.open('https://github.com/randName/nightfest2017/');
+        }, false);
+
         window.addEventListener('resize', function() {
             var camera = FPS.controls.enabled ? fpscamera : orbcamera;
             camera.aspect = window.innerWidth/(window.innerHeight);
