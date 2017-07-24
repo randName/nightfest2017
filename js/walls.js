@@ -10,7 +10,7 @@ var WALLS = {
     }),
     update: function(){
         var l, c = this.geometry.attributes.color;
-        LIGHTS.update(performance.now());
+        LIGHTS.update();
         for (l = 0; l < this.length; l++) {
             LIGHTS.get(l).toArray(c.array, l*3);
         }

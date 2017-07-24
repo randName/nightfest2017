@@ -3,8 +3,13 @@ var LIGHTS = {
     lightmap: [],
     loop: () => {},
     get: () => new THREE.Color(),
-    update: function(t) { this.dt = (t - this.t)/1000; this.t = t; this.loop(); },
     color: new THREE.Color(),
+    update: function() {
+        var t = performance.now()/1000;
+        this.dt = t - this.t;
+        this.t = t;
+        this.loop();
+    },
     set: function(raw){
         this.raw = raw;
         this.state = (new Function(this.exports + raw.setup))();

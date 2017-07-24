@@ -17,4 +17,4 @@ state.c = state.c.map(function(v){
 
 //// output
 var cn = state.c.findIndex(v=>(hypot((x-v.cx)*5,y-v.cy)<0.1));
-return color.setHSL(((cn!=-1)?state.c[cn].cl:0)+t*0.0001, 1.0, (cn!=-1)?0.5:0 );
+return color.setHSL(((cn!=-1)?state.c[cn].cl:0)+t*0.1, 1.0, (cn!=-1)?0.5:0 );
