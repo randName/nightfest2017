@@ -1,7 +1,5 @@
 var FORM = {
-    modal: null,
     fields: ['setup', 'loop', 'output'],
-    show: function(){ this.modal.style.display = "block"; },
     hide: function(){ this.modal.style.display = "none"; },
     init: function(){
         this.modal = document.getElementById('colorform');
@@ -25,11 +23,11 @@ var FORM = {
         content.appendChild(setcol);
         this.modal.appendChild(content);
 
-        document.getElementById('colbtn').onclick = this.show.bind(this);
-        window.onclick = (function(e){if (e.target == this.modal) this.hide();}).bind(this);
+        document.getElementById('colbtn').onclick = () => this.modal.style.display = "block";
+        window.onclick = e => (e.target == this.modal) ? this.hide() : false;
     },
     fill: function(param){
-        this.fields.map(function(i){ document.getElementById(i).innerText = param[i]; })
+        this.fields.map(i => document.getElementById(i).innerText = param[i])
     },
     save: function(){
         this.raw = this.fields.reduce((o, i) => Object.assign(o, {[i]: document.getElementById(i).innerText}), {});

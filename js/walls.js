@@ -1,53 +1,52 @@
-var WALLS = {
-    geometry: new THREE.BufferGeometry(),
-    material: new THREE.MeshPhongMaterial({
+(function(exports){
+    var geometry = new THREE.BufferGeometry();
+    var material =  new THREE.MeshPhongMaterial({
         shininess: 100,
         specular: 0xffffff,
         emissive: 0x090909,
         side: THREE.BackSide,
         shading: THREE.FlatShading,
         vertexColors: THREE.VertexColors,
-    }),
-    update: function(){
-        var l, c = this.geometry.attributes.color;
-        LIGHTS.update();
-        for (l = 0; l < this.length; l++) {
-            LIGHTS.get(l).toArray(c.array, l*3);
-        }
-        c.needsUpdate = true;
-    },
-    init: function(){
+    });
 
-        var pointmap = [], vertices = [], triangles = [];
-        var r, rows = DATA.length, i = 0;
+    var i = 0, vertices = [], triangles = [];
 
-        pointmap = DATA.vertices.map(r => r.map(function(c){vertices.push(...c); return i++;}));
-        this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(vertices), 3));
-        this.geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(vertices.length), 3));
-        this.length = vertices.length;
+    var pointmap = DATA.vertices.map(r => r.map(function(c){vertices.push(...c); return i++;}));
+    geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(vertices), 3));
+    geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(vertices.length), 3));
 
-        var lims, maxc, rem, a, b;
+    var r, rows = DATA.length;
+    var lims, maxc, rem, a, b;
 
-        for (r = 0; r < rows-1; r++) {
-            lim = [pointmap[r].length, pointmap[r+1].length];
-            maxc = Math.min(...lim)-1; 
+    for (r = 0; r < rows-1; r++) {
+        lim = [pointmap[r].length, pointmap[r+1].length];
+        maxc = Math.min(...lim)-1;
 
-            for (c = 0; c < maxc; c++) {
-                triangles.push(pointmap[r][c], pointmap[r+1][c], pointmap[r+1][c+1]);
-                triangles.push(pointmap[r][c], pointmap[r+1][c+1], pointmap[r][c+1]);
-            }
-
-            rem = lim[0] - lim[1];
-            if ( ! rem ) continue;
-            a = (rem>0)?1:0; b = (rem>0)?0:1;
-
-            for (c = maxc; c < Math.max(...lim)-1; c++) {
-                triangles.push(pointmap[r+a][maxc], pointmap[r+b][c+a], pointmap[r+b][c+b]);
-            }
+        for (c = 0; c < maxc; c++) {
+            triangles.push(pointmap[r][c], pointmap[r+1][c], pointmap[r+1][c+1]);
+            triangles.push(pointmap[r][c], pointmap[r+1][c+1], pointmap[r][c+1]);
         }
 
-        this.geometry.setIndex(new THREE.BufferAttribute(new Uint16Array(triangles), 1));
+        rem = lim[0] - lim[1];
+        if ( ! rem ) continue;
+        a = (rem>0)?1:0; b = (rem>0)?0:1;
 
-        return new THREE.Mesh(this.geometry, this.material);
+        for (c = maxc; c < Math.max(...lim)-1; c++) {
+            triangles.push(pointmap[r+a][maxc], pointmap[r+b][c+a], pointmap[r+b][c+b]);
+        }
     }
-}
+
+    geometry.setIndex(new THREE.BufferAttribute(new Uint16Array(triangles), 1));
+
+    Object.assign(exports, {
+        mesh: new THREE.Mesh(geometry, material),
+        update: function(){
+            var l, c = geometry.attributes.color;
+            LIGHTS.update();
+            for (l = 0; l < vertices.length; l++) {
+                LIGHTS.get(l).toArray(c.array, l*3);
+            }
+            c.needsUpdate = true;
+        },
+    });
+})(this.WALLS = {});

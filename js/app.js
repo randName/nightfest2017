@@ -28,8 +28,8 @@
     function init() {
 
         scene = new THREE.Scene();
+        scene.add(WALLS.mesh);
         scene.add(makefloor());
-        scene.add(WALLS.init());
         scene.add(new THREE.AmbientLight(0xffffff, 2));
 
         renderer = new THREE.WebGLRenderer();
@@ -49,7 +49,7 @@
         scene.add(fpscontrols.camera);
 
         FORM.init();
-        EXAMPLE.load('examples/balls.js', function(d){ LIGHTS.init(d); FORM.fill(d); });
+        DATA.load('examples/balls.js', function(d){ LIGHTS.set(d); FORM.fill(d); });
 
         document.getElementById('gitbtn').addEventListener('click', function(e){
             window.open('https://github.com/randName/nightfest2017/');
@@ -57,7 +57,7 @@
 
         window.addEventListener('resize', function() {
             var camera = FPS.controls.enabled ? fpscamera : orbcamera;
-            camera.aspect = window.innerWidth/(window.innerHeight);
+            camera.aspect = window.innerWidth/window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         }, false);
