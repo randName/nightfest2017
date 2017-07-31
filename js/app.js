@@ -49,7 +49,7 @@
         scene.add(fpscontrols.camera);
 
         FORM.init();
-        DATA.load('examples/balls.js', function(d){ LIGHTS.set(d); FORM.fill(d); });
+        DATA.load('examples/fireflies.js', function(d){ LIGHTS.set(d); FORM.fill(d); });
 
         document.getElementById('gitbtn').addEventListener('click', function(e){
             window.open('https://github.com/randName/nightfest2017/');
