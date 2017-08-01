@@ -2,7 +2,7 @@
     'use strict';
     var scene, renderer;
     var startpos = [ 625, 0, 125 ];
-    var orbcontrols, orbcamera, fpscontrols, fpscamera;
+    var orbcontrols, orbcamera;
 
     function makefloor(){
         var floor = new THREE.Mesh(
@@ -43,10 +43,11 @@
         orbcontrols.enableZoom = true;
         orbcontrols.enableKeys = false;
 
-        fpscamera = makecamera();
-        fpscontrols = FPS.init(fpscamera);
-        fpscontrols.camera.position.set(...startpos);
-        scene.add(fpscontrols.camera);
+        if ( FPS.available ) {
+            FPS.setCamera(makecamera(), startpos);
+            scene.add(FPS.cameraObj);
+            document.getElementById('fpsbtn').addEventListener('click', FPS.enable);
+        }
 
         FORM.init();
         DATA.load('examples/fireflies.js', function(d){ LIGHTS.set(d); FORM.fill(d); });
@@ -56,7 +57,7 @@
         }, false);
 
         window.addEventListener('resize', function() {
-            var camera = FPS.controls.enabled ? fpscamera : orbcamera;
+            var camera = FPS.controls.enabled ? FPS.camera : orbcamera;
             camera.aspect = window.innerWidth/window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -67,8 +68,8 @@
         requestAnimationFrame(animate);
         WALLS.update();
         if ( FPS.controls.enabled ) {
-            fpscontrols.update();
-            renderer.render(scene, fpscamera);
+            FPS.update();
+            renderer.render(scene, FPS.camera);
         } else {
             orbcontrols.update();
             renderer.render(scene, orbcamera);

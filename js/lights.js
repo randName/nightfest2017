@@ -21,7 +21,7 @@
     }).reduce((a, b) => a.concat(b));
 
     var statenames = [ 'state', 't', 'dt' ];
-    var col = new THREE.Color();
+    var col = new THREE.Color(0);
     var state = [ {}, 0, 0 ];
     var loop = () => {};
     var output = () => col;
