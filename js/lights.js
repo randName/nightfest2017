@@ -20,13 +20,29 @@
         }, p));
     }).reduce((a, b) => a.concat(b));
 
+    var gui = new dat.GUI();
+    var menu = gui.addFolder("Menu");
+    var disp = gui.addFolder("Patterns");
+    var params = gui.addFolder("Parameters");
+
+    var patterns = {}, states = {}, chooser = {};
     var statenames = [ 'state', 't', 'dt' ];
     var col = new THREE.Color(0);
     var state = [ {}, 0, 0 ];
     var loop = () => {};
     var output = () => col;
 
+    var set = function(n){
+        Object.assign(states[n], (new Function(imports + patterns[n].setup))());
+        loop = new Function(...statenames, imports + patterns[n].loop);
+        output = new Function('l', 'color', ...statenames, imports + patterns[n].output);
+        state[0] = states[n];
+    }
+
     Object.assign(exports, {
+        set: set,
+        menu: menu,
+        patterns: patterns,
         lightmap: lightmap,
         get: i => output(lightmap[i], col, ...state),
         update: function() {
@@ -35,10 +51,27 @@
             state[1] = now;
             loop(...state);
         },
-        set: function(r){
-            state[0] = (new Function(imports + r.setup))();
-            loop = new Function(...statenames, imports + r.loop);
-            output = new Function('l', 'color', ...statenames, imports + r.output);
+        load: function(url, init){
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if (xmlhttp.readyState != 4 || xmlhttp.status != 200) return;
+                var r = xmlhttp.responseText.split(/\/\/\/\/ (setup|gui|loop|output)/).slice(1);
+                patterns[url] = Object.assign(...r.map((v,i)=>(i%2)?{}:{[v]:r[i+1].replace(/^\s+|\s+$/g,'')}));
+
+                chooser[url] = () => set(url);
+                disp.add(chooser, url);
+
+                states[url] = (new Function(imports + patterns[url].setup))();
+                (new Function('state', 'gui', imports + patterns[url].gui))(states[url], params);
+
+                if ( init === true ) {
+                    set(url);
+                } else if ( init ) {
+                    init(patterns[url]);
+                }
+            }
+            xmlhttp.open("GET", 'data/'+url, true);
+            xmlhttp.send();
         },
     });
 })(this.LIGHTS = {});

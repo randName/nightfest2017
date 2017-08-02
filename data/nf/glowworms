@@ -39,24 +39,40 @@ function poissonDisc(radius) {
 		queue.push(samples.length); samples.push([x, y]); ++queueSize;
 	}
 }
-var ff = poissonDisc(0.1);
+var gn = r => poissonDisc(r).map(([x, y]) => ({ cx: x, cy: y, m: rand(), r: rand()}));
 return {
-    c: ff.map(([x, y]) => ({ cx: x, cy: y, m: rand(), r: rand()})),
+    c: gn(0.1),
+    h: 0.55,
+    gen: gn,
+    rad: 0.1,
+    spd: 0.01,
+    cspd: 5,
+    size: 0.02,
+    col: { h: 200, s: 1.0, v: 1.0 },
 }
+
+//// gui
+var f = gui.addFolder('glowworms');
+f.addColor(state, 'col');
+f.add(state, 'spd', 0, 0.1);
+f.add(state, 'cspd', 0, 5);
+f.add(state, 'size', 0, 0.3);
+f.add(state, 'rad', 0, 0.2).onFinishChange(v => state.c = state.gen(v));
 
 //// loop
 var a, ct = Math.round(t%4);
 state.c = state.c.map(function(v){
     a = (ct + Math.floor(v.m*4))%4;
     switch(a){
-        case 1:  v.cy -= dt*0.02; break;
-        case 2:  v.cy += dt*0.02; break;
-        case 3:  v.cx -= dt*0.02; break;
-        default: v.cx += dt*0.02; break;
+        case 1:  v.cy -= dt*state.spd; break;
+        case 2:  v.cy += dt*state.spd; break;
+        case 3:  v.cx -= dt*state.spd; break;
+        default: v.cx += dt*state.spd; break;
     }
     return v
 });
+state.h = state.col.h/360;
 
 //// output
-var cn = state.c.findIndex(v=>(hypot((x-v.cx)*5,y-v.cy)<0.025));
-return color.setHSL(0.55, 1.0, (cn!=-1)?0.31+0.2*sin(state.c[cn].r*2+(t*5)%(2*PI)):0 );
+var cn = state.c.findIndex(v=>(hypot((x-v.cx)*5,y-v.cy)<state.size));
+return color.setHSL(state.h, state.col.s, (cn!=-1)?0.31+0.2*sin(state.c[cn].r*2*PI+(t*state.cspd)%(2*PI)):0 );

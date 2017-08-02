@@ -1,0 +1,34 @@
+//// setup
+var gn = (r) => ({ cx: r?0:rand(), cy: rand(), dx: rand(), dy: rand(), cl: rand()});
+return {
+    num: 15,
+    spd: 0.1,
+    size: 0.1,
+    cspd: 0.1,
+    gen: gn,
+    c: Array.from({length: 15}, gn)
+}
+
+//// gui
+//gui.remember(state);
+var f = gui.addFolder('balls');
+f.add(state, 'num', 1, 30, 1);
+f.add(state, 'spd', 0, 1);
+f.add(state, 'size', 0, 1);
+f.add(state, 'cspd', 0, 0.3);
+
+//// loop
+while (state.c.length<state.num) state.c.push(state.gen(true));
+state.c.length = state.num;
+state.c = state.c.map(function(v){
+    v.cx += v.dx*dt*state.spd;
+    if (v.cx > 1) return state.gen(true);
+
+    v.cy += v.dy*dt*state.spd;
+    if (v.cy < 0 || v.cy > 1) v.dy *= -1;
+    return v
+});
+
+//// output
+var cn = state.c.findIndex(v=>v&&(hypot((x-v.cx)*5,y-v.cy)<state.size));
+return color.setHSL(((cn!=-1)?state.c[cn].cl:0)+t*state.cspd, 1.0, (cn!=-1)?0.5:0 );

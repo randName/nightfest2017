@@ -46,11 +46,11 @@
         if ( FPS.available ) {
             FPS.setCamera(makecamera(), startpos);
             scene.add(FPS.cameraObj);
-            document.getElementById('fpsbtn').addEventListener('click', FPS.enable);
+            LIGHTS.menu.add(FPS, 'enable').name('FPS Mode');
         }
 
-        FORM.init();
-        DATA.load('examples/fireflies.js', function(d){ LIGHTS.set(d); FORM.fill(d); });
+        LIGHTS.load('nf/glowworms');
+        LIGHTS.load('examples/balls', true);
 
         document.getElementById('gitbtn').addEventListener('click', function(e){
             window.open('https://github.com/randName/nightfest2017/');
