@@ -1,0 +1,31 @@
+//// setup
+var gn = (r) => ({ cx: 1-rand()/5, cy: rand(), s: r?0:rand()/10});
+return {
+    h: 0,
+    gen: gn,
+    spd: 0.1,
+    size: 0.3,
+    brig: 0.2,
+    col: { h: 0, s: 1.0, v: 1.0 },
+    c: Array.from({length: 5}, gn)
+}
+
+//// gui
+gui.addColor(state, 'col');
+gui.add(state, 'spd', 0, 0.5);
+gui.add(state, 'size', 0, 1);
+gui.add(state, 'brig', 0, 1);
+
+//// loop
+state.c = state.c.map(function(v){
+    v.s += dt*state.spd; if (v.s>state.size) return state.gen(1);
+    return v
+});
+state.h = state.col.h/360;
+
+//// output
+var cn = state.c.findIndex(function(v){
+    var dx=v.cx-x, dy=v.cy-y
+    return !(Math.round(8*atan2(dy, dx)/PI)%3) && hypot(dx*4,dy) < v.s;
+});
+return color.setHSL(state.h, state.col.s, (cn!=-1)?(state.brig-state.c[cn].s)*5:0 );

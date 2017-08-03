@@ -49,6 +49,7 @@
             LIGHTS.menu.add(FPS, 'enable').name('FPS Mode');
         }
 
+        LIGHTS.load('nf/fireworks');
         LIGHTS.load('nf/glowworms');
         LIGHTS.load('examples/balls', true);
 

@@ -36,6 +36,8 @@
         Object.assign(states[n], (new Function(imports + patterns[n].setup))());
         loop = new Function(...statenames, imports + patterns[n].loop);
         output = new Function('l', 'color', ...statenames, imports + patterns[n].output);
+        Object.values(patterns).map(p => p.param.close());
+        patterns[n].param.open();
         state[0] = states[n];
     }
 
@@ -57,12 +59,13 @@
                 if (xmlhttp.readyState != 4 || xmlhttp.status != 200) return;
                 var r = xmlhttp.responseText.split(/\/\/\/\/ (setup|gui|loop|output)/).slice(1);
                 patterns[url] = Object.assign(...r.map((v,i)=>(i%2)?{}:{[v]:r[i+1].replace(/^\s+|\s+$/g,'')}));
+                patterns[url].param = params.addFolder(url);
 
                 chooser[url] = () => set(url);
                 disp.add(chooser, url);
 
                 states[url] = (new Function(imports + patterns[url].setup))();
-                (new Function('state', 'gui', imports + patterns[url].gui))(states[url], params);
+                (new Function('state', 'gui', imports + patterns[url].gui))(states[url], patterns[url].param);
 
                 if ( init === true ) {
                     set(url);

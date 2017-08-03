@@ -52,12 +52,11 @@ return {
 }
 
 //// gui
-var f = gui.addFolder('glowworms');
-f.addColor(state, 'col');
-f.add(state, 'spd', 0, 0.1);
-f.add(state, 'cspd', 0, 5);
-f.add(state, 'size', 0, 0.3);
-f.add(state, 'rad', 0, 0.2).onFinishChange(v => state.c = state.gen(v));
+gui.addColor(state, 'col');
+gui.add(state, 'spd', 0, 0.1);
+gui.add(state, 'cspd', 0, 5);
+gui.add(state, 'size', 0, 0.3);
+gui.add(state, 'rad', 0.1, 0.2).onFinishChange(v => state.c = state.gen(v));
 
 //// loop
 var a, ct = Math.round(t%4);
