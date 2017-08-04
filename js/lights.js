@@ -46,12 +46,15 @@
         menu: menu,
         patterns: patterns,
         lightmap: lightmap,
-        get: i => output(lightmap[i], col, ...state),
         update: function() {
             var now = performance.now()/1000;
             state[2] = now - state[1];
             state[1] = now;
             loop(...state);
+            for (var l = 0; l < WALLS.length; l++) {
+                output(lightmap[l], col, ...state).toArray(WALLS.color.array, l*3);
+            }
+            WALLS.color.needsUpdate = true;
         },
         load: function(url, init){
             var xmlhttp = new XMLHttpRequest();

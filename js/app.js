@@ -67,7 +67,7 @@
 
     function animate() {
         requestAnimationFrame(animate);
-        WALLS.update();
+        LIGHTS.update();
         if ( FPS.controls.enabled ) {
             FPS.update();
             renderer.render(scene, FPS.camera);

@@ -39,14 +39,8 @@
     geometry.setIndex(new THREE.BufferAttribute(new Uint16Array(triangles), 1));
 
     Object.assign(exports, {
+        length: vertices.length,
+        color: geometry.attributes.color,
         mesh: new THREE.Mesh(geometry, material),
-        update: function(){
-            var l, c = geometry.attributes.color;
-            LIGHTS.update();
-            for (l = 0; l < vertices.length; l++) {
-                LIGHTS.get(l).toArray(c.array, l*3);
-            }
-            c.needsUpdate = true;
-        },
     });
 })(this.WALLS = {});
