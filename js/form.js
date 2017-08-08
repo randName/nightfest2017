@@ -1,40 +1,58 @@
-var FORM = {
-    fields: ['setup', 'loop', 'output'],
-    hide: function(){ this.modal.style.display = "none"; },
-    init: function(){
-        this.modal = document.getElementById('colorform');
+(function(exports){
+    var data = {}, fields = ['setup', 'loop', 'output', 'gui'];
 
-        var e, content = document.createElement('div');
-        content.className = 'modal-content';
+    var modal = document.getElementById('colorform');
 
-        this.fields.map(function(i){
-            e = document.createElement('span');
-            e.innerHTML = i.charAt(0).toUpperCase() + i.slice(1);
-            content.appendChild(e);
-            e = document.createElement('pre');
-            e.id = i; e.contentEditable = true;
-            content.appendChild(e);
-        });
+    Object.assign(modal, {
+        hide: function(){
+            this.style.display = "none";
+        },
+        show: function(){
+            this.style.display = "block";
+        },
+    });
 
-        var setcol = document.createElement('button');
-        setcol.style.float = 'right';
-        setcol.innerHTML = 'Update';
-        setcol.onclick = this.set.bind(this);
-        content.appendChild(setcol);
-        this.modal.appendChild(content);
 
-        document.getElementById('colbtn').onclick = () => this.modal.style.display = "block";
-        window.onclick = e => (e.target == this.modal) ? this.hide() : false;
-    },
-    fill: function(param){
-        this.fields.map(i => document.getElementById(i).innerText = param[i])
-    },
-    save: function(){
-        this.raw = this.fields.reduce((o, i) => Object.assign(o, {[i]: document.getElementById(i).innerText}), {});
-        return this.raw;
-    },
-    set: function(){
-        LIGHTS.set(this.save());
-        this.hide();
-    },
-}
+    var content = document.createElement('div');
+    content.className = 'modal-content';
+
+    var setcol = document.createElement('button');
+    setcol.style.float = 'right';
+    setcol.innerHTML = 'Update';
+
+    fields.map(function(i){
+        data[i] = "";
+        var e = document.createElement('span');
+        e.innerHTML = i.charAt(0).toUpperCase() + i.slice(1);
+        content.appendChild(e);
+        e = document.createElement('pre');
+        e.id = i; e.contentEditable = true;
+        content.appendChild(e);
+    });
+
+
+    var setf = (d) => console.log(d);
+    var set = function(){
+        Object.assign(data, ...fields.map(i => ({[i]: document.getElementById(i).innerText})));
+        setf(data);
+        modal.hide();
+    };
+
+    setcol.onclick = set;
+    content.appendChild(setcol);
+    modal.appendChild(content);
+
+    window.onclick = e => (e.target == modal) ? modal.hide() : false;
+
+    Object.assign(exports, {
+        set: set,
+        data: data,
+        fields: fields,
+        onSet: (e) => setf = e,
+        show: () => modal.show(),
+        fill: function(d){
+            Object.assign(data, d);
+            fields.map(i => document.getElementById(i).innerText = d[i]);
+        },
+    });
+})(this.FORM = {});

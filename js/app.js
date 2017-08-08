@@ -49,9 +49,16 @@
             LIGHTS.menu.add(FPS, 'enable').name('FPS Mode');
         }
 
-        LIGHTS.load('nf/fireworks');
-        LIGHTS.load('nf/glowworms');
-        LIGHTS.load('examples/balls', true);
+        LIGHTS.menu.add(FORM, 'show').name('Editor');
+        var code = LIGHTS.menu.addFolder('Code');
+
+        LIGHTS.gui.remember(FORM.data);
+        FORM.fields.map(i => code.add(FORM.data, i).listen());
+        FORM.onSet((d) => LIGHTS.load('Editor', d, true));
+
+        LIGHTS.loadData('nf/fireworks');
+        LIGHTS.loadData('nf/glowworms');
+        LIGHTS.loadData('examples/balls', (d) => FORM.fill(d));
 
         document.getElementById('gitbtn').addEventListener('click', function(e){
             window.open('https://github.com/randName/nightfest2017/');
