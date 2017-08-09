@@ -2,7 +2,7 @@
     var imports = Object.entries({
         'Math.random': 'rand',
         '(typeof l!=="undefined")?l:{}': ['x', 'y', 'z', 'r', 'n'],
-        Math: ['PI', 'sin', 'cos', 'tan', 'min', 'max', 'abs', 'sqrt', 'hypot', 'atan2'],
+        Math: ['PI', 'sin', 'cos', 'tan', 'min', 'max', 'abs', 'sqrt', 'hypot', 'atan2', 'exp'],
     }).map(([k,v]) => (v.join?('const {'+v.join()+'}'):'var '+v)+' = '+k+';').join(' ');
 
     var i = 0;
@@ -73,15 +73,15 @@
         menu: menu,
         patterns: patterns,
         lightmap: lightmap,
-        update: function() {
+        update: function(wall) {
             var now = performance.now()/1000;
             state[2] = now - state[1];
             state[1] = now;
             loop(...state);
-            for (var l = 0; l < WALLS.length; l++) {
-                output(lightmap[l], col, ...state).toArray(WALLS.color.array, l*3);
+            for (var l = 0; l < wall.length; l++) {
+                output(lightmap[l], col, ...state).toArray(wall.color.array, l*3);
             }
-            WALLS.color.needsUpdate = true;
+            wall.color.needsUpdate = true;
         },
         load: load,
         loadData: function(url, init){

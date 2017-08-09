@@ -49,6 +49,8 @@
             LIGHTS.menu.add(FPS, 'enable').name('FPS Mode');
         }
 
+        LIGHTS.menu.add({_:()=>LIGHTS.loadData(prompt('Path to data'),(d)=>FORM.fill(d))},'_').name('Load data');
+
         LIGHTS.menu.add(FORM, 'show').name('Editor');
         var code = LIGHTS.menu.addFolder('Code');
 
@@ -74,7 +76,7 @@
 
     function animate() {
         requestAnimationFrame(animate);
-        LIGHTS.update();
+        LIGHTS.update(WALLS);
         if ( FPS.controls.enabled ) {
             FPS.update();
             renderer.render(scene, FPS.camera);
