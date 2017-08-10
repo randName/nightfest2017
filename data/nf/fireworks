@@ -1,5 +1,5 @@
 //// setup
-var gn = (r) => ({ cx: 1-rand()/5, cy: rand(), s: r?0:rand()/10});
+var gn = (r) => ({ cx: rand(), cy: rand(), s: r?0:rand()/10});
 return {
     h: 0,
     gen: gn,

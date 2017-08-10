@@ -1,0 +1,27 @@
+//// setup
+return {
+    h: 0.33,
+    mul: 20,
+    spd: 0.1,
+    slope: 1,
+    len: 0.6,
+    wid: 0.02,
+    col: { h: 120, s: 1.0, v: 1.0 },
+}
+
+//// gui
+gui.addColor(state, 'col');
+gui.add(state, 'mul');
+gui.add(state, 'spd', 0, 0.5);
+gui.add(state, 'wid', 0, 0.1);
+gui.add(state, 'len', 0, 1);
+gui.add(state, 'slope', 0.1, 5);
+
+//// loop
+state.h = state.col.h/360;
+state.pos = (t*0.1)%1;
+
+//// output
+var val = (state.pos-x)/state.len;
+var met = abs((x*state.slope)-y) < state.wid && val > 0 && val < 1 ? exp(-val*state.mul) :0;
+return color.setHSL(state.h, state.col.s, met);

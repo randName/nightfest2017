@@ -58,6 +58,7 @@
         FORM.fields.map(i => code.add(FORM.data, i).listen());
         FORM.onSet((d) => LIGHTS.load('Editor', d, true));
 
+        LIGHTS.loadData('nf/meteor');
         LIGHTS.loadData('nf/fireworks');
         LIGHTS.loadData('nf/glowworms');
         LIGHTS.loadData('examples/balls', (d) => FORM.fill(d));
