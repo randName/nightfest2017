@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <title>Praxis+</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <script type="text/javascript" src="js/hardware.js"></script>
+  <script type="text/javascript" src="js/board_layout.js"></script>
+ </head>
+ <body>
+  <div id="container">
+   Board: <span id="bar"></span>
+   <pre id="code"></pre>
+  </div>
+  <script>
+    var boards = BOARD_LAYOUT.map(
+        l => (new HARDWARE.Board(Object.assign(...Object.keys(l).map(
+            p => ({[p]: new HARDWARE.Strip(...l[p])})
+        )))).getArduino()
+    );
+
+    var code = document.getElementById('code');
+    var b, bar = document.getElementById('bar');
+
+    for ( var i = 0; i < boards.length; i++ ) {
+        b = document.createElement('button');
+        b.innerText = i;
+        b.onclick = function(){ code.innerText = boards[this.innerText]; }
+        bar.appendChild(b);
+    }
+  </script>
+ </body>
+</html>
