@@ -1,0 +1,27 @@
+//// setup
+var lr = n => Array.from(Array(n).keys()).map(i=>i/n);
+return {
+    h: 0,
+    spd: 0.1,
+    cspd: 0.2,
+    size: 0.02,
+    slope: 1,
+    lr: lr,
+    l: lr(5),
+    strips: 5,
+    col: { h: 0, s: 1.0, v: 1.0 },
+}
+
+//// gui
+gui.addColor(state, 'col');
+gui.add(state, 'strips', 1, 10, 1).onFinishChange(v => state.l = state.lr(v));
+gui.add(state, 'spd', 0, 0.5);
+gui.add(state, 'size', 0, 1);
+gui.add(state, 'slope', 0.1, 5);
+
+//// loop
+state.h = state.col.h/360;
+
+//// output
+var check = state.l.some(i => abs((((x-i+t*state.spd)%1)*state.slope)-y) < state.size);
+return color.setHSL(state.h, 1.0, check?0.5:0 );

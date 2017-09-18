@@ -1,6 +1,6 @@
 (function(exports){
 
-    var jl = function(lines, sep = ',', indent = 4, pre = '{\n', post = '\n};'){
+    var jl = function(lines, sep = ',', indent = 2, pre = '{\n', post = '\n};'){
         var ind = Array(indent+1).join(" ");
         return pre + ind + lines.join(sep + '\n' + ind) + post;
     }
@@ -24,7 +24,7 @@
             this.generate();
         },
         getArduino: function(){
-            return `${d}_SIZE ${this.bytes.length}\n${this.setup.join('\n')}\n\nPROGMEM uint32_t LIGHTMAP[] = ${jl(this.bytes)}`
+            return `${d}_SIZE ${this.bytes.length}\n${this.setup.join('\n')}\n\nconst PROGMEM uint32_t LIGHTMAP[] = ${jl(this.bytes)}`
         },
     });
 
