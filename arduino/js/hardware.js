@@ -52,6 +52,8 @@
             return this.leds.map(l => x + l.map(th).join(''));
         },
     });
+    
+    //hi
 
     exports.Board = Board;
     exports.Strip = Strip;
